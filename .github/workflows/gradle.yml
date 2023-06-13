@@ -42,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Run Build
-        run: ./gradlew build sonarqube --info  
+        run: ./gradlew build
       - name: Run Tests
         run: ./gradlew test
       - name: Generate JacocoReport
@@ -51,6 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonarqube --info
         
         
       
