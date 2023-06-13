@@ -69,7 +69,7 @@ jobs:
       - name: Check Docker images
         run: docker image ls -a
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-web-app
+        run: docker push spring-web-app ${{ secrets.DOCKER_USERNAME }}/spring-web-app
 
         
       
