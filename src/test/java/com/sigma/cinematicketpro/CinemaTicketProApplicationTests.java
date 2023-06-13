@@ -13,12 +13,12 @@ class CinemaTicketProApplicationTests {
 	private CinemaTicketProApplication controller;
 
 	@Test
-	void contextLoads() {
-		assertNotNull(controller);
+	public void testMain() {
+		CinemaTicketProApplication.main(new String[] {});
 	}
 
 	@Test
-	void sayHi() {
+	void testSayHi() {
 		assertEquals("Hello, world!", controller.sayHi());
 	}
 }
