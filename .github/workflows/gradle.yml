@@ -47,16 +47,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonarqube --info
         
-      - name: Build and Push to Docker Image
-        uses: cloudposse/github-action-docker-build-push@main
-        with:
-          registry: registry.hub.docker.com
-          organization: ${{ github.event.repository.owner.login }}
-          repository: ${{ github.event.repository.name }}
-          login: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKERH_PASSWORD }}
-          platforms: linux/amd64,linux/arm64
-
-    outputs:
-      image: ${{ steps.build.outputs.image }}
-      tag: ${{ steps.build.outputs.tag }}
+      
