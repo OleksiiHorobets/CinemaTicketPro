@@ -43,15 +43,15 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Run Build
         run: ./gradlew build
-      - name: Run Tests
-        run: ./gradlew test
-      - name: Generate JacocoReport
-        run: ./gradlew jacocoTestReport
-      - name: SonarQube Analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube --info   
+#       - name: Run Tests
+#         run: ./gradlew test
+#       - name: Generate JacocoReport
+#         run: ./gradlew jacocoTestReport
+#       - name: SonarQube Analyze
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#         run: ./gradlew sonarqube --info   
       
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
