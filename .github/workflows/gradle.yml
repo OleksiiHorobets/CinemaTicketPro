@@ -70,7 +70,7 @@ jobs:
 #           push: true
 #           tags: ${{ secrets.DOCKER_USERNAME }}/app:latest    
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{ github.repository }}:$(date +%s)
+        run: docker build . --file Dockerfile --tag spring-web-app:$(date +%s)
 
         
       
