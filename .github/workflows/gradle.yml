@@ -67,7 +67,7 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag spring-web-app:$(date +%s)
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-web-app:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-web-app
 
         
       
