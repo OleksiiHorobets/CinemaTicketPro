@@ -51,13 +51,20 @@ jobs:
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html/
-      - name: SonarCloud Scan
-        uses: jinguji/sonarcloud-gradle-github-action@v2
-        with:
-          sonar-token: ${{ secrets.SONAR_TOKEN }}
-          sonar-organization: oleksiihorobets
+      
+      - name: Run SonarCloud Analysis
+        uses: sonarsource/sonarcloud-github-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Check Quality Gate Status
+        run: |
+          quality_gate_status=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ env.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus.status')
+          echo "Quality Gate Status: $quality_gate_status"
+          if [[ "$quality_gate_status" != "OK" ]]; then
+            echo "Quality Gate failed. Exiting with failure."
+            exit 1
+          fi
           
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
