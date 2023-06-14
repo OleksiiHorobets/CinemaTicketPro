@@ -55,13 +55,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube --info
-      - name: Check SonarQube Quality Gate
-        uses: styfle/failure-action@v2
-        with:
-          job-status: ${{ job.status }}
-          check-type: 'status'
-          message: 'SonarQube Quality Gate failed.'
+        run: ./gradlew build sonar --info
           
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
