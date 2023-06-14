@@ -47,6 +47,10 @@ jobs:
         run: ./gradlew test
       - name: Generate JacocoReport
         run: ./gradlew jacocoTestReport
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: /build/reports/jacoco/test/html/
       - name: SonarQube Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
