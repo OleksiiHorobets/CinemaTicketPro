@@ -36,8 +36,8 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 #       - name: Run Build
 #         run: ./gradlew clean build sonarqube --info
-#       - name: Run Tests
-#         run: ./gradlew test
+      - name: Run Tests
+        run: ./gradlew test
       - name: Generate JacocoReport
         run: ./gradlew jacocoTestReport
       - uses: actions/upload-artifact@v3
