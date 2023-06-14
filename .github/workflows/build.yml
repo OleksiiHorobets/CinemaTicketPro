@@ -49,7 +49,7 @@ jobs:
       - name: Generate JacocoReport
         run: ./gradlew jacocoTestReport
       - name: Upload Jacoco report to Artifact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html/
