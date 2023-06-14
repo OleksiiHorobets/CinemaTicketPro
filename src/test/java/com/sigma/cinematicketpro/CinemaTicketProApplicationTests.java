@@ -17,7 +17,7 @@ class CinemaTicketProApplicationTests {
 // 		CinemaTicketProApplication.main(new String[] {});
 // 	}
 //
-// 	@Test
+// 	@Test 
 // 	void testSayHi() {
 // 		assertEquals("Hello, world!", controller.sayHi());
 // 	}
