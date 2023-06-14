@@ -55,6 +55,7 @@ jobs:
         uses: jinguji/sonarcloud-gradle-github-action@v2
         with:
           sonar-token: ${{ secrets.SONAR_TOKEN }}
+          sonar-organization: oleksiihorobets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
