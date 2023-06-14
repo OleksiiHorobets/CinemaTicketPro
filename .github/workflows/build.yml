@@ -21,7 +21,6 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -48,26 +47,18 @@ jobs:
         run: ./gradlew test
       - name: Generate JacocoReport
         run: ./gradlew jacocoTestReport
-      - name: Upload Jacoco report to Artifact
+      - name: Upload Jacoco Report
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html/
-      
-      - name: SonarCloud Scan
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info  
-        
-#       - name: Check Quality Gate Status
-#         run: |
-#           quality_gate_status=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ env.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus.status')
-#           echo "Quality Gate Status: $quality_gate_status"
-#           if [[ "$quality_gate_status" != "OK" ]]; then
-#             echo "Quality Gate failed. Exiting with failure."
-#             exit 1
-#           fi
+#       - name: SonarCloud Scan
+#         uses: jinguji/sonarcloud-gradle-github-action@v2
+#         with:
+#           sonar-token: ${{ secrets.SONAR_TOKEN }}
+#           sonar-organization: oleksiihorobets
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
