@@ -7,6 +7,7 @@ plugins {
 }
 jacocoTestReport {
 	reports {
+		html.enabled true
 		xml.enabled true
 	}
 }
