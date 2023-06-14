@@ -21,6 +21,7 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -47,17 +48,18 @@ jobs:
         run: ./gradlew test
       - name: Generate JacocoReport
         run: ./gradlew jacocoTestReport
+      - name: Upload Jacoco report to Artifact
       - uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html/
       
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+        run: ./gradlew build sonarqube --info  
+        
       - name: Check Quality Gate Status
         run: |
           quality_gate_status=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ env.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus.status')
