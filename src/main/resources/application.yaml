@@ -1,0 +1,58 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      authentication-database: admin
+      username: root_user
+      password: root_pass
+      host: localhost
+      port: 27017
+      database: movies_db
+      auto-index-creation: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: cinema-ticket-pro
+
+server:
+  error:
+    include-stacktrace: on_param
+  servlet:
+    context-path: /cinema-ticket-pro
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      authentication-database: admin
+      username: root_user
+      password: root_pass
+      host: mongodb
+      port: 27017
+      database: movies_db
+      auto-index-creation: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: cinema-ticket-pro
+
+server:
+  error:
+    include-stacktrace: on_param
+  servlet:
+    context-path: /cinema-ticket-pro
