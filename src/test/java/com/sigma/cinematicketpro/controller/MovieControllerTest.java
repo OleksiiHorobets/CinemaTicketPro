@@ -5,7 +5,11 @@ import com.sigma.cinematicketpro.TestUtils;
 import com.sigma.cinematicketpro.dto.MovieDTO;
 import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
+import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
+import com.sigma.cinematicketpro.service.AppUserService;
 import com.sigma.cinematicketpro.service.MovieService;
+import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -36,9 +42,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class MovieControllerTest {
     @Autowired
+    private WebApplicationContext context;
+
     private MockMvc mockMvc;
+
     @MockBean
     private MovieService movieService;
+
+    @MockBean
+    private JwtTokenUtils jwtTokenUtils;
+
+    @MockBean
+    private AppUserService userService;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .build();
+    }
 
     @Test
     void shouldReturnListOfMoviesWhenGetAllMovies() throws Exception {
@@ -48,9 +73,9 @@ class MovieControllerTest {
         RequestBuilder request = MockMvcRequestBuilders.get("/movies");
 
         MvcResult response = mockMvc.perform(request)
+                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andReturn();
 
         List<MovieDTO> actualMovieList = mapMvcResultIntoObject(response, new TypeReference<>() {
@@ -84,9 +109,9 @@ class MovieControllerTest {
         RequestBuilder request = MockMvcRequestBuilders.get("/movies/{id}", movieId);
 
         MvcResult response = mockMvc.perform(request)
+                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andReturn();
         MovieDTO actualMovie = mapMvcResultIntoObject(response, new TypeReference<>() {
         });
@@ -109,6 +134,7 @@ class MovieControllerTest {
 
         MvcResult response = mockMvc.perform(request)
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andReturn();
 
         MovieDTO actualMovieDTO = mapMvcResultIntoObject(response, new TypeReference<>() {
@@ -143,6 +169,7 @@ class MovieControllerTest {
 
         MvcResult response = mockMvc.perform(request)
                 .andDo(print())
+                .andExpect(status().isBadRequest())
                 .andReturn();
 
         String actualResponse = response.getResponse().getContentAsString();
@@ -215,6 +242,7 @@ class MovieControllerTest {
 
         MvcResult response = mockMvc.perform(request)
                 .andDo(print())
+                .andExpect(status().isBadRequest())
                 .andReturn();
 
         String actualResponse = response.getResponse().getContentAsString();
