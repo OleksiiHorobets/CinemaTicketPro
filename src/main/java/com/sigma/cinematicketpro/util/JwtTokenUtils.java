@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -67,8 +66,6 @@ public class JwtTokenUtils {
     }
 
     private Map<String, Object> getDefaultClaims(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", userDetails.getAuthorities());
-        return claims;
+        return Map.of("roles", userDetails.getAuthorities());
     }
 }

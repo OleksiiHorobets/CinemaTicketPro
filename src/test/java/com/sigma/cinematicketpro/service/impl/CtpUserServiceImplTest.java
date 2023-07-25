@@ -1,6 +1,6 @@
 package com.sigma.cinematicketpro.service.impl;
 
-import com.sigma.cinematicketpro.entity.AppUser;
+import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,17 +19,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AppUserServiceImplTest {
+class CtpUserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
-    private AppUserServiceImpl sut;
+    private CtpUserServiceImpl sut;
 
     @Test
     void shouldLoadUserByUsernameWhenUserExists() {
         String username = "username";
-        AppUser userDetailsMock = mock(AppUser.class);
+        CtpUser userDetailsMock = mock(CtpUser.class);
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(userDetailsMock));
 
         UserDetails result = sut.loadUserByUsername(username);

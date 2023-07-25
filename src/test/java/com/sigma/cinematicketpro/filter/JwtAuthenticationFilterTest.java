@@ -1,8 +1,8 @@
 package com.sigma.cinematicketpro.filter;
 
 import com.sigma.cinematicketpro.TestUtils;
-import com.sigma.cinematicketpro.entity.AppUser;
-import com.sigma.cinematicketpro.service.AppUserService;
+import com.sigma.cinematicketpro.entity.CtpUser;
+import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.util.JwtTokenUtils;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ class JwtAuthenticationFilterTest {
     @Mock
     private JwtTokenUtils jwtTokenUtils;
     @Mock
-    private AppUserService userService;
+    private CtpUserService ctpUserService;
     @Mock
     MockHttpServletRequest mockRequest;
     @Mock
@@ -103,7 +103,7 @@ class JwtAuthenticationFilterTest {
         when(mockRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeader);
         when(jwtTokenUtils.getUsername(any())).thenReturn(userDetails.getUsername());
         when(jwtTokenUtils.isTokenValid(any(), any())).thenReturn(false);
-        when(userService.loadUserByUsername(any())).thenReturn(userDetails);
+        when(ctpUserService.loadUserByUsername(any())).thenReturn(userDetails);
 
         sut.doFilterInternal(mockRequest, mockResponse, mockFilterChain);
 
@@ -120,11 +120,11 @@ class JwtAuthenticationFilterTest {
         when(mockRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeader);
         when(jwtTokenUtils.getUsername(any())).thenReturn(userDetails.getUsername());
         when(jwtTokenUtils.isTokenValid(any(), any())).thenReturn(true);
-        when(userService.loadUserByUsername(any())).thenReturn(userDetails);
+        when(ctpUserService.loadUserByUsername(any())).thenReturn(userDetails);
 
         sut.doFilterInternal(mockRequest, mockResponse, mockFilterChain);
 
-        UserDetails actualAuthUser = (AppUser) SecurityContextHolder.getContext()
+        UserDetails actualAuthUser = (CtpUser) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
 

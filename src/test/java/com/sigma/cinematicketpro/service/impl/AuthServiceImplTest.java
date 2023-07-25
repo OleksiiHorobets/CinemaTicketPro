@@ -3,9 +3,8 @@ package com.sigma.cinematicketpro.service.impl;
 import com.sigma.cinematicketpro.TestUtils;
 import com.sigma.cinematicketpro.dto.AuthenticationRequest;
 import com.sigma.cinematicketpro.dto.RegistrationRequest;
-import com.sigma.cinematicketpro.entity.AppUser;
+import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Role;
-import com.sigma.cinematicketpro.exception.NoSuchRoleException;
 import com.sigma.cinematicketpro.exception.UserAlreadyExistsException;
 import com.sigma.cinematicketpro.repository.RoleRepository;
 import com.sigma.cinematicketpro.repository.UserRepository;
@@ -15,11 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,6 +41,8 @@ class AuthServiceImplTest {
     private JwtTokenUtils jwtTokenUtils;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AuthenticationManager authenticationManager;
 
     @InjectMocks
     private AuthServiceImpl sut;
@@ -48,40 +50,23 @@ class AuthServiceImplTest {
     @Test
     void shouldSetDefaultUserRoleToNewlyRegisteredUserWhenRegisterInvoked() {
         RegistrationRequest regRequest = TestUtils.getValidRegistrationRequest();
-        AppUser expectedAppUser = buildDefaultUserFromRequest(regRequest);
+        CtpUser expectedCtpUser = buildDefaultUserFromRequest(regRequest);
         String expectedToken = "generated-token";
         String encodedPassword = "encoded-password";
 
         when(userRepository.existsByEmail(any())).thenReturn(false);
         when(userRepository.existsByUsername(any())).thenReturn(false);
-        when(userRepository.save(any())).thenReturn(expectedAppUser);
-        when(roleRepository.findByName(any())).thenReturn(Optional.of(new Role(1L, "ROLE_USER")));
-        when(jwtTokenUtils.generateToken(expectedAppUser)).thenReturn(expectedToken);
+        when(userRepository.save(any())).thenReturn(expectedCtpUser);
+        when(roleRepository.findByName(any())).thenReturn(new Role(1L, "ROLE_USER"));
+        when(jwtTokenUtils.generateToken(expectedCtpUser)).thenReturn(expectedToken);
         when(passwordEncoder.encode(regRequest.getPassword())).thenReturn(encodedPassword);
 
         String actualToken = sut.register(regRequest);
 
         assertThat(actualToken).isEqualTo(expectedToken);
 
-        verify(userRepository, times(1)).save(expectedAppUser);
+        verify(userRepository, times(1)).save(expectedCtpUser);
     }
-
-    @Test
-    void shouldThrowNoSuchRoleExceptionWhenNoUserRoleFound() {
-        RegistrationRequest regRequest = TestUtils.getValidRegistrationRequest();
-        AppUser expectedAppUser = buildDefaultUserFromRequest(regRequest);
-
-        when(userRepository.existsByEmail(any())).thenReturn(false);
-        when(userRepository.existsByUsername(any())).thenReturn(false);
-        when(roleRepository.findByName(any())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> sut.register(regRequest))
-                .isExactlyInstanceOf(NoSuchRoleException.class)
-                .hasMessage("No such user role found: ROLE_USER");
-
-        verify(userRepository, never()).save(any());
-    }
-
 
     @Test
     void shouldThrowUserAlreadyExistsExceptionWithErrorListIfUserAlreadyExistsWhenRegisterInvoked() {
@@ -111,31 +96,12 @@ class AuthServiceImplTest {
                 "non_existing_username",
                 "password"
         );
-        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
+        when(authenticationManager.authenticate(any())).thenThrow(BadCredentialsException.class);
 
         assertThatThrownBy(() -> sut.authenticate(authRequest))
-                .isExactlyInstanceOf(BadCredentialsException.class)
-                .hasMessage("Invalid Credentials");
+                .isExactlyInstanceOf(BadCredentialsException.class);
 
-        verify(userRepository, times(1)).findByUsername(authRequest.getUsername());
-    }
-
-    @Test
-    void shouldThrowBadCredentialsExceptionWhenAuthorizeAndPasswordsNotMatching() {
-        AuthenticationRequest authRequest = new AuthenticationRequest(
-                "username",
-                "wrong_password"
-        );
-        AppUser expectedUser = mock(AppUser.class);
-
-        when(userRepository.findByUsername(any())).thenReturn(Optional.of(expectedUser));
-        when(passwordEncoder.matches(authRequest.getPassword(), expectedUser.getPassword())).thenReturn(false);
-
-        assertThatThrownBy(() -> sut.authenticate(authRequest))
-                .isExactlyInstanceOf(BadCredentialsException.class)
-                .hasMessage("Invalid Credentials");
-
-        verify(userRepository, times(1)).findByUsername(authRequest.getUsername());
+        verify(authenticationManager, times(1)).authenticate(any());
     }
 
     @Test
@@ -144,22 +110,22 @@ class AuthServiceImplTest {
                 "username",
                 "wrong_password"
         );
-        AppUser expectedUser = mock(AppUser.class);
+        CtpUser expectedUser = mock(CtpUser.class);
+        Authentication authentication = mock(Authentication.class);
         String expectedToken = "token";
 
-        when(userRepository.findByUsername(any())).thenReturn(Optional.of(expectedUser));
-        when(passwordEncoder.matches(authRequest.getPassword(), expectedUser.getPassword())).thenReturn(true);
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(expectedUser);
         when(jwtTokenUtils.generateToken(expectedUser)).thenReturn(expectedToken);
 
         String actualToken = sut.authenticate(authRequest);
 
         assertThat(actualToken).isEqualTo(expectedToken);
-
-        verify(userRepository, times(1)).findByUsername(authRequest.getUsername());
+        verify(authenticationManager, times(1)).authenticate(any());
     }
 
-    private AppUser buildDefaultUserFromRequest(RegistrationRequest regRequest) {
-        return AppUser.builder()
+    private CtpUser buildDefaultUserFromRequest(RegistrationRequest regRequest) {
+        return CtpUser.builder()
                 .username(regRequest.getUsername())
                 .firstName(regRequest.getFirstName())
                 .lastName(regRequest.getLastName())

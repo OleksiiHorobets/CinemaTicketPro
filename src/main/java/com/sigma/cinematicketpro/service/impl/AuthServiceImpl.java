@@ -2,18 +2,20 @@ package com.sigma.cinematicketpro.service.impl;
 
 import com.sigma.cinematicketpro.dto.AuthenticationRequest;
 import com.sigma.cinematicketpro.dto.RegistrationRequest;
-import com.sigma.cinematicketpro.entity.AppUser;
+import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Role;
-import com.sigma.cinematicketpro.exception.NoSuchRoleException;
 import com.sigma.cinematicketpro.exception.UserAlreadyExistsException;
-import com.sigma.cinematicketpro.repository.UserRepository;
 import com.sigma.cinematicketpro.repository.RoleRepository;
+import com.sigma.cinematicketpro.repository.UserRepository;
 import com.sigma.cinematicketpro.service.AuthService;
 import com.sigma.cinematicketpro.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,29 +28,29 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Override
+    @Transactional
     public String register(RegistrationRequest registrationRequest) {
         checkIfAlreadyExists(registrationRequest);
 
         Role defaultUserRole = getDefaultUserRole();
-        AppUser appUser = buildUser(registrationRequest, defaultUserRole);
+        CtpUser ctpUser = buildUser(registrationRequest, defaultUserRole);
 
-        AppUser registeredUser = userRepository.save(appUser);
+        CtpUser registeredUser = userRepository.save(ctpUser);
 
         return jwtTokenUtils.generateToken(registeredUser);
     }
 
     @Override
+    @Transactional
     public String authenticate(AuthenticationRequest authRequest) {
-        final String username = authRequest.getUsername();
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+        );
 
-        AppUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new BadCredentialsException("Invalid Credentials"));
-
-        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Invalid Credentials");
-        }
+        CtpUser user = (CtpUser) auth.getPrincipal();
 
         return jwtTokenUtils.generateToken(user);
     }
@@ -69,12 +71,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Role getDefaultUserRole() {
-        return roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new NoSuchRoleException("No such user role found: ROLE_USER"));
+        return roleRepository.findByName("ROLE_USER");
     }
 
-    private AppUser buildUser(RegistrationRequest registrationRequest, Role userRole) {
-        return AppUser.builder()
+    private CtpUser buildUser(RegistrationRequest registrationRequest, Role userRole) {
+        return CtpUser.builder()
                 .username(registrationRequest.getUsername())
                 .firstName(registrationRequest.getFirstName())
                 .lastName(registrationRequest.getLastName())

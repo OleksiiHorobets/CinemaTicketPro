@@ -34,7 +34,7 @@ spring:
 
   jwt:
     secret: ${DEV_JWT_SECRET}
-    lifetime: 30m
+    lifetime: 10s
 
 server:
   error:
@@ -115,13 +115,13 @@ spring:
       authentication-database: admin
       username: ${PROD_MONGO_USER}
       password: ${PROD_MONGO_PASS}
-      host: localhost
+      host: mongodb
       port: 27017
       database: movies_db
       auto-index-creation: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/registration
+    url: jdbc:postgresql://postgres_db:5432/registration
     username: ${PROD_POSTGRES_USER}
     password: ${PROD_POSTGRES_PASS}
   jpa:
@@ -141,7 +141,7 @@ spring:
     name: cinema-ticket-pro
 
   jwt:
-    secret: ${ PROD_JWT_SECRET }
+    secret: ${PROD_JWT_SECRET}
     lifetime: 30m
 
 server:

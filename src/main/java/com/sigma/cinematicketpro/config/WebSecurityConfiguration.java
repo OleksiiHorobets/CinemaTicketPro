@@ -2,12 +2,14 @@ package com.sigma.cinematicketpro.config;
 
 import com.sigma.cinematicketpro.controller.handler.DefaultFilterExceptionHandler;
 import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
-import com.sigma.cinematicketpro.service.AppUserService;
+import com.sigma.cinematicketpro.service.CtpUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,7 +24,7 @@ import static org.springframework.http.HttpMethod.PUT;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfiguration {
-    private final AppUserService userService;
+    private final CtpUserService ctpUserService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final DefaultFilterExceptionHandler defaultFilterExceptionHandler;
 
@@ -41,8 +43,7 @@ public class WebSecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(defaultFilterExceptionHandler, JwtAuthenticationFilter.class)
-        ;
+                .addFilterBefore(defaultFilterExceptionHandler, JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -53,10 +54,15 @@ public class WebSecurityConfiguration {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userService);
+        daoAuthenticationProvider.setUserDetailsService(ctpUserService);
         return daoAuthenticationProvider;
     }
 }

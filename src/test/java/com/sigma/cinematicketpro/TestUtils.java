@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sigma.cinematicketpro.dto.MovieDTO;
 import com.sigma.cinematicketpro.dto.RegistrationRequest;
-import com.sigma.cinematicketpro.entity.AppUser;
+import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.entity.Role;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -122,21 +122,19 @@ public final class TestUtils {
     }
 
     public static UserDetails getUserDetails() {
-        return AppUser.builder()
+        return CtpUser.builder()
                 .id(1L)
                 .firstName("John")
                 .lastName("Doe")
                 .email("john_doe@gmail.com")
                 .username("john_doe")
                 .password("secure_pass")
-                .roles(
-                        Set.of(
-                                Role.builder()
-                                        .id(1L)
-                                        .name("ADMIN")
-                                        .build()
-                        )
-                )
+                .roles(Set.of(
+                        Role.builder()
+                                .id(1L)
+                                .name("ADMIN")
+                                .build()
+                ))
                 .build();
     }
 

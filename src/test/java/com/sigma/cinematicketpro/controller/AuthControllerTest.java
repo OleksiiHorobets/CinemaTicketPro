@@ -4,7 +4,7 @@ import com.sigma.cinematicketpro.TestUtils;
 import com.sigma.cinematicketpro.dto.AuthenticationRequest;
 import com.sigma.cinematicketpro.dto.RegistrationRequest;
 import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
-import com.sigma.cinematicketpro.service.AppUserService;
+import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.service.AuthService;
 import com.sigma.cinematicketpro.util.JwtTokenUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class AuthControllerTest {
     private JwtTokenUtils jwtTokenUtils;
 
     @MockBean
-    private AppUserService userService;
+    private CtpUserService ctpUserService;
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -91,7 +91,7 @@ class AuthControllerTest {
         when(authService.register(any()))
                 .thenReturn("token");
 
-        RequestBuilder request = MockMvcRequestBuilders.post("/auth/register")
+        RequestBuilder request = MockMvcRequestBuilders.post("/auth/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getObjectMapper().writeValueAsString(registrationRequest))
                 .characterEncoding(StandardCharsets.UTF_8);

@@ -29,9 +29,9 @@ public class DefaultFilterExceptionHandler extends OncePerRequestFilter {
                                  @NotNull FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (JwtException e) {
-            setErrorResponse(HttpStatus.FORBIDDEN, response, e);
-            log.warn(e.getMessage(), e.getCause());
+        } catch (JwtException jwtException) {
+            setErrorResponse(HttpStatus.FORBIDDEN, response, jwtException);
+            log.warn(jwtException.getMessage(), jwtException.getCause());
         }
     }
 

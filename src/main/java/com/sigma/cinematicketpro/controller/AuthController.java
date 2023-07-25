@@ -33,7 +33,7 @@ public class AuthController {
                 .build();
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public AuthenticationResponse register(@Valid @RequestBody RegistrationRequest registrationRequest) {

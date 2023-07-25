@@ -31,7 +31,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class AppUser implements UserDetails {
+public class CtpUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -73,6 +73,8 @@ public class AppUser implements UserDetails {
         return roles;
     }
 
+    //     TODO: (JIRA: CIN-79) This logic is suppressed because it's a pet project.
+    //      In case of need will be implemented according to application requirements and business rules.
     @Override
     public boolean isAccountNonExpired() {
         return true;

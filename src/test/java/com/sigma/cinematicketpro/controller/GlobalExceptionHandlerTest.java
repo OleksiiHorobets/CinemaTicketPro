@@ -5,7 +5,7 @@ import com.sigma.cinematicketpro.controller.handler.GlobalExceptionHandler;
 import com.sigma.cinematicketpro.dto.AuthenticationRequest;
 import com.sigma.cinematicketpro.exception.ApiErrorResponse;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
-import com.sigma.cinematicketpro.service.AppUserService;
+import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.util.JwtTokenUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,7 +56,7 @@ class GlobalExceptionHandlerTest {
     private JwtTokenUtils jwtTokenUtils;
 
     @MockBean
-    private AppUserService userService;
+    private CtpUserService ctpUserService;
 
     @Autowired
     private GlobalExceptionHandler sut;
