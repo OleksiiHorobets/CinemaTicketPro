@@ -1,6 +1,6 @@
 package com.sigma.cinematicketpro.config;
 
-import com.sigma.cinematicketpro.controller.handler.DefaultFilterExceptionHandler;
+import com.sigma.cinematicketpro.controller.handler.JwtFilterExceptionHandler;
 import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
 import com.sigma.cinematicketpro.service.CtpUserService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import static org.springframework.http.HttpMethod.PUT;
 public class WebSecurityConfiguration {
     private final CtpUserService ctpUserService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final DefaultFilterExceptionHandler defaultFilterExceptionHandler;
+    private final JwtFilterExceptionHandler jwtFilterExceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,7 +43,7 @@ public class WebSecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(defaultFilterExceptionHandler, JwtAuthenticationFilter.class);
+                .addFilterBefore(jwtFilterExceptionHandler, JwtAuthenticationFilter.class);
 
         return http.build();
     }

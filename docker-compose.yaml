@@ -53,7 +53,7 @@ services:
       - ./var.env
 
 volumes:
-  data: { }
+  data:
 
 networks:
   default:

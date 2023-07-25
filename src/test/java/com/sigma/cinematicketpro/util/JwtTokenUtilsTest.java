@@ -59,24 +59,28 @@ class JwtTokenUtilsTest {
     }
 
     @Test
-    void shouldReturnUsernameWhenGetUsernameValidToken() {
+    void shouldReturnUsernameWhenGetUsernameOnValidToken() {
+        String expectedSubject = userDetails.getUsername();
+
         String accessToken = sut.generateToken(userDetails);
 
-        String subject = Jwts.parserBuilder()
+        String actualSubject = Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(accessToken)
                 .getBody()
                 .getSubject();
 
-        assertThat(subject).isEqualTo(userDetails.getUsername());
+        assertThat(actualSubject).isEqualTo(expectedSubject);
     }
 
     @Test
     void shouldReturnClaimWhenExtractClaim() {
-        String subject = sut.extractClaim(validToken, Claims::getSubject);
+        String expectedSubject = userDetails.getUsername();
 
-        assertThat(subject).isEqualTo(userDetails.getUsername());
+        String actualSubject = sut.extractClaim(validToken, Claims::getSubject);
+
+        assertThat(actualSubject).isEqualTo(expectedSubject);
     }
 
     @Test

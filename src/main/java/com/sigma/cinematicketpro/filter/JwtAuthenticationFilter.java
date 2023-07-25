@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
     private final JwtTokenUtils jwtTokenUtils;
     private final CtpUserService ctpUserService;
 
@@ -50,8 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private Optional<String> getBearerToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
-                .filter(token -> token.startsWith("Bearer "))
-                .map(token -> token.replaceFirst("Bearer ", ""));
+                .filter(token -> token.startsWith(AUTHORIZATION_BEARER_PREFIX))
+                .map(token -> token.replaceFirst(AUTHORIZATION_BEARER_PREFIX, ""));
     }
 
     private UsernamePasswordAuthenticationToken buildAuthToken(HttpServletRequest request, UserDetails userDetails) {
