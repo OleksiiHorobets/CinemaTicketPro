@@ -1,8 +1,9 @@
-package com.sigma.cinematicketpro.controller;
+package com.sigma.cinematicketpro.controller.handler;
 
 import com.sigma.cinematicketpro.exception.ApiErrorResponse;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,6 +38,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation issues occurred",
                 errors
+        );
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrorResponse handleBadCredentialsException(BadCredentialsException ex) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        return new ApiErrorResponse(
+                status.value(),
+                ex.getMessage()
         );
     }
 

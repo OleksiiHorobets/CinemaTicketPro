@@ -11,11 +11,85 @@ spring:
       port: 27017
       database: movies_db
       auto-index-creation: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/registration
+    username: ${DEV_POSTGRES_USER}
+    password: ${DEV_POSTGRES_PASS}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   application:
     name: cinema-ticket-pro
+
+  jwt:
+    secret: ${DEV_JWT_SECRET}
+    lifetime: 10s
+
+server:
+  error:
+    include-stacktrace: on_param
+  servlet:
+    context-path: /cinema-ticket-pro
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    mongodb:
+      authentication-database: admin
+      username: root_user
+      password: root_pass
+      host: localhost
+      port: 27017
+      database: movies_db
+      auto-index-creation: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: h2
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  h2:
+    console.enabled: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: cinema-ticket-pro
+
+  jwt:
+    secret: testSecretForJwtTokenGeneratorShouldNotBeUsedAnywhereElseOutsideTests
+    lifetime: 30m
 
 server:
   error:
@@ -39,20 +113,48 @@ spring:
   data:
     mongodb:
       authentication-database: admin
-      username: root_user
-      password: root_pass
+      username: ${PROD_MONGO_USER}
+      password: ${PROD_MONGO_PASS}
       host: mongodb
       port: 27017
       database: movies_db
       auto-index-creation: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres_db:5432/registration
+    username: ${PROD_POSTGRES_USER}
+    password: ${PROD_POSTGRES_PASS}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   application:
     name: cinema-ticket-pro
 
+  jwt:
+    secret: ${PROD_JWT_SECRET}
+    lifetime: 30m
+
 server:
   error:
     include-stacktrace: on_param
   servlet:
     context-path: /cinema-ticket-pro
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG

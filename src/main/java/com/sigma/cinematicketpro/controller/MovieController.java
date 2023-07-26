@@ -46,7 +46,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public MovieDTO updateMovie(@PathVariable String id, @Valid  @RequestBody MovieDTO movieDto) {
+    public MovieDTO updateMovie(@PathVariable String id, @Valid @RequestBody MovieDTO movieDto) {
         return movieService.updateMovie(id, movieDto);
     }
 }

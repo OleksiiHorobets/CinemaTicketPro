@@ -7,18 +7,41 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+      - ./data/mongo:/data/mongodb
+      - ./data/mongo/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root_user
       - MONGO_INITDB_ROOT_PASSWORD=root_pass
     command: --quiet
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:15.3-alpine
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres-data:/data/postgres
+    environment:
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_pass
+      - POSTGRES_DB=registration
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   cinema-ticket:
     depends_on:
       mongodb:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     container_name: cinema-ticket-app
     build:
@@ -26,11 +49,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-
+    env_file:
+      - ./var.env
 
 volumes:
-  data: {}
+  data:
 
 networks:
   default:
-    name: mongodb_network
+    name: ctp_network

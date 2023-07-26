@@ -5,7 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sigma.cinematicketpro.dto.MovieDTO;
+import com.sigma.cinematicketpro.dto.RegistrationRequest;
+import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Movie;
+import com.sigma.cinematicketpro.entity.Role;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
@@ -14,6 +18,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 public final class TestUtils {
     private final static ObjectMapper objectMapper = new ObjectMapper()
@@ -114,5 +119,32 @@ public final class TestUtils {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static UserDetails getUserDetails() {
+        return CtpUser.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john_doe@gmail.com")
+                .username("john_doe")
+                .password("secure_pass")
+                .roles(Set.of(
+                        Role.builder()
+                                .id(1L)
+                                .name("ADMIN")
+                                .build()
+                ))
+                .build();
+    }
+
+    public static RegistrationRequest getValidRegistrationRequest() {
+        return RegistrationRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john_doe@gmail.com")
+                .username("john_doe")
+                .password("secure_pass")
+                .build();
     }
 }
