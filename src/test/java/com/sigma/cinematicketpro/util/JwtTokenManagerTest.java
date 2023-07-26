@@ -31,11 +31,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = JwtTokenUtils.class)
+@SpringBootTest(classes = JwtTokenManager.class)
 @ActiveProfiles("test")
-class JwtTokenUtilsTest {
+class JwtTokenManagerTest {
     @Autowired
-    private JwtTokenUtils sut;
+    private JwtTokenManager sut;
     @Value("${spring.jwt.secret}")
     private String secret;
     @Value("${spring.jwt.lifetime}")

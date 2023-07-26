@@ -20,7 +20,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtFilterExceptionHandler extends OncePerRequestFilter {
+public class JwtExceptionFilter extends OncePerRequestFilter {
     private final ObjectMapper mapper;
 
     @Override

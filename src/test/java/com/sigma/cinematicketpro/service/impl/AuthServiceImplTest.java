@@ -8,7 +8,7 @@ import com.sigma.cinematicketpro.entity.Role;
 import com.sigma.cinematicketpro.exception.UserAlreadyExistsException;
 import com.sigma.cinematicketpro.repository.RoleRepository;
 import com.sigma.cinematicketpro.repository.UserRepository;
-import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import com.sigma.cinematicketpro.util.JwtTokenManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +38,7 @@ class AuthServiceImplTest {
     @Mock
     private RoleRepository roleRepository;
     @Mock
-    private JwtTokenUtils jwtTokenUtils;
+    private JwtTokenManager jwtTokenManager;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -58,7 +58,7 @@ class AuthServiceImplTest {
         when(userRepository.existsByUsername(any())).thenReturn(false);
         when(userRepository.save(any())).thenReturn(expectedCtpUser);
         when(roleRepository.findByName(any())).thenReturn(new Role(1L, "ROLE_USER"));
-        when(jwtTokenUtils.generateToken(expectedCtpUser)).thenReturn(expectedToken);
+        when(jwtTokenManager.generateToken(expectedCtpUser)).thenReturn(expectedToken);
         when(passwordEncoder.encode(regRequest.getPassword())).thenReturn(encodedPassword);
 
         String actualToken = sut.register(regRequest);
@@ -116,7 +116,7 @@ class AuthServiceImplTest {
 
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(expectedUser);
-        when(jwtTokenUtils.generateToken(expectedUser)).thenReturn(expectedToken);
+        when(jwtTokenManager.generateToken(expectedUser)).thenReturn(expectedToken);
 
         String actualToken = sut.authenticate(authRequest);
 

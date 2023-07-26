@@ -6,7 +6,7 @@ import com.sigma.cinematicketpro.dto.RegistrationRequest;
 import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
 import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.service.AuthService;
-import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import com.sigma.cinematicketpro.util.JwtTokenManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +47,7 @@ class AuthControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private JwtTokenUtils jwtTokenUtils;
+    private JwtTokenManager jwtTokenManager;
 
     @MockBean
     private CtpUserService ctpUserService;

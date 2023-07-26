@@ -1,7 +1,7 @@
 package com.sigma.cinematicketpro.filter;
 
 import com.sigma.cinematicketpro.service.CtpUserService;
-import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import com.sigma.cinematicketpro.util.JwtTokenManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtTokenManager jwtTokenManager;
     private final CtpUserService ctpUserService;
 
     @Override
@@ -34,12 +34,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         getBearerToken(request).ifPresent(jwt -> {
-            String username = jwtTokenUtils.getUsername(jwt);
+            String username = jwtTokenManager.getUsername(jwt);
 
             Optional.ofNullable(username)
                     .filter(user -> isUserNotAuthenticated())
                     .map(ctpUserService::loadUserByUsername)
-                    .filter(user -> jwtTokenUtils.isTokenValid(jwt, user))
+                    .filter(user -> jwtTokenManager.isTokenValid(jwt, user))
                     .ifPresent(setUpAuthToken(request));
         });
         filterChain.doFilter(request, response);

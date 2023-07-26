@@ -3,7 +3,7 @@ package com.sigma.cinematicketpro.filter;
 import com.sigma.cinematicketpro.TestUtils;
 import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.service.CtpUserService;
-import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import com.sigma.cinematicketpro.util.JwtTokenManager;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class JwtAuthenticationFilterTest {
     @Mock
-    private JwtTokenUtils jwtTokenUtils;
+    private JwtTokenManager jwtTokenManager;
     @Mock
     private CtpUserService ctpUserService;
     @Mock
@@ -70,7 +70,7 @@ class JwtAuthenticationFilterTest {
         String authHeaderWithInvalidToken = getAuthHeaderWithToken("invalid_token");
 
         when(mockRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeaderWithInvalidToken);
-        when(jwtTokenUtils.getUsername(any())).thenReturn(null);
+        when(jwtTokenManager.getUsername(any())).thenReturn(null);
 
         sut.doFilterInternal(mockRequest, mockResponse, mockFilterChain);
 
@@ -85,7 +85,7 @@ class JwtAuthenticationFilterTest {
 
         SecurityContextHolder.getContext().setAuthentication(initialAuth);
         when(mockRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeader);
-        when(jwtTokenUtils.getUsername(any())).thenReturn("username");
+        when(jwtTokenManager.getUsername(any())).thenReturn("username");
 
         sut.doFilterInternal(mockRequest, mockResponse, mockFilterChain);
 
@@ -101,8 +101,8 @@ class JwtAuthenticationFilterTest {
         UserDetails userDetails = TestUtils.getUserDetails();
 
         when(mockRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeader);
-        when(jwtTokenUtils.getUsername(any())).thenReturn(userDetails.getUsername());
-        when(jwtTokenUtils.isTokenValid(any(), any())).thenReturn(false);
+        when(jwtTokenManager.getUsername(any())).thenReturn(userDetails.getUsername());
+        when(jwtTokenManager.isTokenValid(any(), any())).thenReturn(false);
         when(ctpUserService.loadUserByUsername(any())).thenReturn(userDetails);
 
         sut.doFilterInternal(mockRequest, mockResponse, mockFilterChain);
@@ -118,8 +118,8 @@ class JwtAuthenticationFilterTest {
         UserDetails userDetails = TestUtils.getUserDetails();
 
         when(mockRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeader);
-        when(jwtTokenUtils.getUsername(any())).thenReturn(userDetails.getUsername());
-        when(jwtTokenUtils.isTokenValid(any(), any())).thenReturn(true);
+        when(jwtTokenManager.getUsername(any())).thenReturn(userDetails.getUsername());
+        when(jwtTokenManager.isTokenValid(any(), any())).thenReturn(true);
         when(ctpUserService.loadUserByUsername(any())).thenReturn(userDetails);
 
         sut.doFilterInternal(mockRequest, mockResponse, mockFilterChain);

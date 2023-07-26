@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtTokenUtils {
+public class JwtTokenManager {
     @Value("${spring.jwt.secret}")
     private String secret;
     @Value("${spring.jwt.lifetime}")
@@ -51,7 +51,7 @@ public class JwtTokenUtils {
         return getUsername(token).equals(userDetails.getUsername());
     }
 
-    public Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -61,8 +61,7 @@ public class JwtTokenUtils {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
     private Map<String, Object> getDefaultClaims(UserDetails userDetails) {

@@ -8,7 +8,7 @@ import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
 import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
 import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.service.MovieService;
-import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import com.sigma.cinematicketpro.util.JwtTokenManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +50,7 @@ class MovieControllerTest {
     private MovieService movieService;
 
     @MockBean
-    private JwtTokenUtils jwtTokenUtils;
+    private JwtTokenManager jwtTokenManager;
 
     @MockBean
     private CtpUserService ctpUserService;

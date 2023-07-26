@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class JwtFilterExceptionHandlerTest {
+class JwtExceptionFilterTest {
     @Mock
     private MockFilterChain filterChain;
 
@@ -36,11 +36,11 @@ class JwtFilterExceptionHandlerTest {
     @Mock
     private MockHttpServletRequest request;
 
-    private JwtFilterExceptionHandler sut;
+    private JwtExceptionFilter sut;
 
     @BeforeEach
     void setUp() {
-        sut = new JwtFilterExceptionHandler(getObjectMapper());
+        sut = new JwtExceptionFilter(getObjectMapper());
     }
 
     @Test

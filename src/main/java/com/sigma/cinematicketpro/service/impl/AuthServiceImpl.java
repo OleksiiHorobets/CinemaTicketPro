@@ -8,7 +8,7 @@ import com.sigma.cinematicketpro.exception.UserAlreadyExistsException;
 import com.sigma.cinematicketpro.repository.RoleRepository;
 import com.sigma.cinematicketpro.repository.UserRepository;
 import com.sigma.cinematicketpro.service.AuthService;
-import com.sigma.cinematicketpro.util.JwtTokenUtils;
+import com.sigma.cinematicketpro.util.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +26,7 @@ import java.util.Set;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtTokenManager jwtTokenManager;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
         CtpUser registeredUser = userRepository.save(ctpUser);
 
-        return jwtTokenUtils.generateToken(registeredUser);
+        return jwtTokenManager.generateToken(registeredUser);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
         CtpUser user = (CtpUser) auth.getPrincipal();
 
-        return jwtTokenUtils.generateToken(user);
+        return jwtTokenManager.generateToken(user);
     }
 
     private void checkIfAlreadyExists(RegistrationRequest registrationRequest) {
