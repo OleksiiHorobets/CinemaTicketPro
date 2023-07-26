@@ -34,6 +34,7 @@ public class WebSecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz ->
                         authz
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(POST, "/auth/**").permitAll()
                                 .requestMatchers(PUT, "/movies/**").hasRole("ADMIN")
                                 .requestMatchers(DELETE, "/movies/**").hasRole("ADMIN")
