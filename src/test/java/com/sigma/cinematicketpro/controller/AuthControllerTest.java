@@ -1,11 +1,11 @@
 package com.sigma.cinematicketpro.controller;
 
 import com.sigma.cinematicketpro.TestUtils;
-import com.sigma.cinematicketpro.dto.AuthenticationRequest;
-import com.sigma.cinematicketpro.dto.RegistrationRequest;
+import com.sigma.cinematicketpro.dto.auth.AuthenticationRequest;
+import com.sigma.cinematicketpro.dto.auth.RegistrationRequest;
 import com.sigma.cinematicketpro.filter.JwtAuthenticationFilter;
-import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.service.AuthService;
+import com.sigma.cinematicketpro.service.CtpUserService;
 import com.sigma.cinematicketpro.util.JwtTokenManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

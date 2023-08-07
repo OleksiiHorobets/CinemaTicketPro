@@ -1,4 +1,4 @@
-package com.sigma.cinematicketpro.dto;
+package com.sigma.cinematicketpro.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

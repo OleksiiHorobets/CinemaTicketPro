@@ -1,8 +1,8 @@
 package com.sigma.cinematicketpro.controller;
 
-import com.sigma.cinematicketpro.dto.AuthenticationRequest;
-import com.sigma.cinematicketpro.dto.AuthenticationResponse;
-import com.sigma.cinematicketpro.dto.RegistrationRequest;
+import com.sigma.cinematicketpro.dto.auth.AuthenticationRequest;
+import com.sigma.cinematicketpro.dto.auth.AuthenticationResponse;
+import com.sigma.cinematicketpro.dto.auth.RegistrationRequest;
 import com.sigma.cinematicketpro.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
