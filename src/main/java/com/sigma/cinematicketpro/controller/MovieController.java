@@ -1,6 +1,7 @@
 package com.sigma.cinematicketpro.controller;
 
 import com.sigma.cinematicketpro.dto.MovieDTO;
+import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 import com.sigma.cinematicketpro.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,10 @@ public class MovieController {
     @PutMapping("/{id}")
     public MovieDTO updateMovie(@PathVariable String id, @Valid @RequestBody MovieDTO movieDto) {
         return movieService.updateMovie(id, movieDto);
+    }
+
+    @GetMapping("/trending")
+    public List<TMDBMovie> getTrendingMovies() {
+        return movieService.getTrendingMovies();
     }
 }

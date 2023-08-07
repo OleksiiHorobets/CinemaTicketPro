@@ -249,4 +249,15 @@ class MovieControllerTest {
 
         JSONAssert.assertEquals(actualResponse, expectedResponse, true);
     }
+
+    @Test
+    void shouldReturnListOfTrendingMoviesWhenGetAllMovies() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/movies/trending"))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(movieService, times(1)).getTrendingMovies();
+    }
 }

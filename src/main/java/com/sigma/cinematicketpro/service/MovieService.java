@@ -1,6 +1,7 @@
 package com.sigma.cinematicketpro.service;
 
 import com.sigma.cinematicketpro.dto.MovieDTO;
+import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface MovieService {
     MovieDTO updateMovie(String id, MovieDTO movieDto);
 
     void deleteMovieById(String id);
+
+    List<TMDBMovie> getTrendingMovies();
 }

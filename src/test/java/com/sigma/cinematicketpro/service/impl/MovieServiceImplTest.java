@@ -1,11 +1,14 @@
 package com.sigma.cinematicketpro.service.impl;
 
 import com.sigma.cinematicketpro.TestUtils;
+import com.sigma.cinematicketpro.client.TMDBRestClient;
 import com.sigma.cinematicketpro.dto.MovieDTO;
+import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
 import com.sigma.cinematicketpro.mapper.impl.MovieMapperImpl;
 import com.sigma.cinematicketpro.repository.MovieRepository;
+import com.sigma.cinematicketpro.service.GenreService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,19 +16,29 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
+import static com.sigma.cinematicketpro.TestUtils.getTMDBGenresIdGenreMap;
+import static com.sigma.cinematicketpro.TestUtils.getTMDBMoviesWithMappedGenresTitles;
+import static com.sigma.cinematicketpro.TestUtils.getTMDBMoviesWithoutGenresTitles;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MovieServiceImplTest {
     @Mock
     private MovieRepository movieRepository;
+    @Mock
+    private GenreService genreService;
+    @Mock
+    private TMDBRestClient tmdbRestClient;
     @Mock
     private MovieMapperImpl movieMapper;
     @InjectMocks
@@ -143,5 +156,27 @@ class MovieServiceImplTest {
 
         verify(movieRepository, times(1)).existsById(movieId);
         verify(movieRepository, times(1)).deleteById(movieId);
+    }
+
+    @Test
+    void shouldCallTMDBRestClientAndGenreServiceWhenGetTrendingMovies() {
+        sut.getTrendingMovies();
+
+        verify(genreService, times(1)).getAllGenresMap();
+        verify(tmdbRestClient, times(1)).getTrendingMovies();
+        verifyNoMoreInteractions(genreService, tmdbRestClient);
+    }
+
+    @Test
+    void shouldMapGenreIdToGenreTitleWhenGetTrendingMovies() throws IOException {
+        List<TMDBMovie> moviesWithNoId = getTMDBMoviesWithoutGenresTitles();
+        List<TMDBMovie> expectedTMDBMovieList = getTMDBMoviesWithMappedGenresTitles();
+
+        when(tmdbRestClient.getTrendingMovies()).thenReturn(moviesWithNoId);
+        when(genreService.getAllGenresMap()).thenReturn(getTMDBGenresIdGenreMap());
+
+        List<TMDBMovie> actualTMDBMoviesList = sut.getTrendingMovies();
+
+        assertThat(actualTMDBMoviesList).isEqualTo(expectedTMDBMovieList);
     }
 }
