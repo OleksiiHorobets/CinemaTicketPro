@@ -1,7 +1,7 @@
 package com.sigma.cinematicketpro.client;
 
-import com.sigma.cinematicketpro.dto.tmdb.TMDBGenre;
 import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
+import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
 
 import java.util.List;
 

@@ -6,11 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sigma.cinematicketpro.dto.MovieDTO;
 import com.sigma.cinematicketpro.dto.auth.RegistrationRequest;
-import com.sigma.cinematicketpro.dto.tmdb.TMDBGenre;
-import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.entity.Role;
+import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -159,18 +158,9 @@ public final class TestUtils {
         return mapJsonToObject("tmdb/genres/genres.json", new TypeReference<>() {});
     }
 
-    public static Map<Integer, TMDBGenre> getTMDBGenresIdGenreMap() throws IOException {
+    public static Map<Long, TMDBGenre> getTMDBGenresIdGenreMap() throws IOException {
         return getTMDBGenresList().stream()
                 .collect(toMap(TMDBGenre::getId, identity()));
-    }
-
-    public static List<TMDBMovie> getTMDBMoviesWithMappedGenresTitles() throws IOException {
-        return mapJsonToObject("tmdb/movies/trending-movies-mapped-genres-titles.json", new TypeReference<>() {});
-    }
-
-    public static List<TMDBMovie> getTMDBMoviesWithoutGenresTitles() throws IOException {
-        return mapJsonToObject("tmdb/movies/trending-movies-no-genres-titles.json", new TypeReference<>() {
-        });
     }
 
     public static <T> T mapJsonToObject(String resourcePath, TypeReference<T> typeReference) throws IOException {

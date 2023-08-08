@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

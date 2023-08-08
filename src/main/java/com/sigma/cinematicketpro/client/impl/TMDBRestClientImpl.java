@@ -1,15 +1,15 @@
 package com.sigma.cinematicketpro.client.impl;
 
 import com.sigma.cinematicketpro.client.TMDBRestClient;
-import com.sigma.cinematicketpro.dto.tmdb.TMDBGenre;
 import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 import com.sigma.cinematicketpro.dto.tmdb.response.MovieTMDBApiResponse;
 import com.sigma.cinematicketpro.dto.tmdb.response.TMDBGenresApiResponse;
+import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class TMDBRestClientImpl implements TMDBRestClient {

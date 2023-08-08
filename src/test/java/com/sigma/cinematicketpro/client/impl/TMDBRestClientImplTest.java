@@ -1,9 +1,9 @@
 package com.sigma.cinematicketpro.client.impl;
 
-import com.sigma.cinematicketpro.dto.tmdb.TMDBGenre;
 import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 import com.sigma.cinematicketpro.dto.tmdb.response.MovieTMDBApiResponse;
 import com.sigma.cinematicketpro.dto.tmdb.response.TMDBGenresApiResponse;
+import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
