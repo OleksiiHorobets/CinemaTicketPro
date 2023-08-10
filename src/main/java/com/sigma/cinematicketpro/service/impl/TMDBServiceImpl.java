@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,16 +22,18 @@ public class TMDBServiceImpl implements TMDBService {
     @Override
     public List<TMDBMovie> getTrendingMovies() {
         Map<Long, TMDBGenre> genresMap = genreService.getAllGenresMap();
-
         List<TMDBMovie> trendingMovies = tmdbRestClient.getTrendingMovies();
 
-        trendingMovies.forEach(tmdbMovie -> tmdbMovie.setGenres(
-                        tmdbMovie.getGenres()
-                                .stream()
-                                .map(genre -> genresMap.get(genre.getId()))
-                                .collect(Collectors.toSet())
-                )
-        );
+        trendingMovies.forEach(mapMovieGenres(genresMap));
         return trendingMovies;
+    }
+
+    private Consumer<TMDBMovie> mapMovieGenres(Map<Long, TMDBGenre> genresMap) {
+        return tmdbMovie -> tmdbMovie.setGenres(
+                tmdbMovie.getGenres()
+                        .stream()
+                        .map(genre -> genresMap.get(genre.getId()))
+                        .collect(Collectors.toSet())
+        );
     }
 }

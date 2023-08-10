@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
 import static java.util.function.Function.identity;
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toConcurrentMap;
 
 
@@ -32,9 +33,10 @@ public class GenreServiceImpl implements GenreService {
     }
 
     private ConcurrentMap<Long, TMDBGenre> fetchGenresData() {
-        List<TMDBGenre> genresList = genreRepository.findAll();
-
-        return genresList.isEmpty() ? updateGenresData() : convertGenresListToMap(genresList);
+        return Optional.of(genreRepository.findAll())
+                .filter(not(List::isEmpty))
+                .map(this::convertGenresListToMap)
+                .orElseGet(this::updateGenresData);
     }
 
     public ConcurrentMap<Long, TMDBGenre> updateGenresData() {
