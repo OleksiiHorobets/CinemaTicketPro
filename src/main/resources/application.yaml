@@ -34,7 +34,7 @@ spring:
 
   jwt:
     secret: ${DEV_JWT_SECRET}
-    lifetime: 10s
+    lifetime: 30m
 
 server:
   error:
@@ -50,37 +50,15 @@ logging:
           mongodb:
             core:
               MongoTemplate: DEBUG
+external-api:
+  tmdb:
+    token: ${DEV_TMDB_TOKEN}
+    base-url: https://api.themoviedb.org/3/
 ---
 spring:
   config:
     activate:
       on-profile: test
-  data:
-    mongodb:
-      authentication-database: admin
-      username: root_user
-      password: root_pass
-      host: localhost
-      port: 27017
-      database: movies_db
-      auto-index-creation: true
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    database: h2
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-  h2:
-    console.enabled: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -105,6 +83,10 @@ logging:
           mongodb:
             core:
               MongoTemplate: DEBUG
+external-api:
+  tmdb:
+    token: ${TEST_TMDB_TOKEN}
+    base-url: https://api.themoviedb.org/3/
 ---
 spring:
   config:
@@ -158,3 +140,7 @@ logging:
           mongodb:
             core:
               MongoTemplate: DEBUG
+external-api:
+  tmdb:
+    token: ${PROD_TMDB_TOKEN}
+    base-url: https://api.themoviedb.org/3/

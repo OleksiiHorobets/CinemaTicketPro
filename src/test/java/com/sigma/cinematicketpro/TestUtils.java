@@ -5,20 +5,26 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sigma.cinematicketpro.dto.MovieDTO;
-import com.sigma.cinematicketpro.dto.RegistrationRequest;
+import com.sigma.cinematicketpro.dto.auth.RegistrationRequest;
 import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.entity.Role;
+import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 public final class TestUtils {
     private final static ObjectMapper objectMapper = new ObjectMapper()
@@ -146,5 +152,19 @@ public final class TestUtils {
                 .username("john_doe")
                 .password("secure_pass")
                 .build();
+    }
+
+    public static List<TMDBGenre> getTMDBGenresList() throws IOException {
+        return mapJsonToObject("tmdb/genres/genres.json", new TypeReference<>() {});
+    }
+
+    public static Map<Long, TMDBGenre> getTMDBGenresIdGenreMap() throws IOException {
+        return getTMDBGenresList().stream()
+                .collect(toMap(TMDBGenre::getId, identity()));
+    }
+
+    public static <T> T mapJsonToObject(String resourcePath, TypeReference<T> typeReference) throws IOException {
+        var resource = TestUtils.class.getClassLoader().getResourceAsStream(resourcePath);
+        return objectMapper.readValue(resource, typeReference);
     }
 }

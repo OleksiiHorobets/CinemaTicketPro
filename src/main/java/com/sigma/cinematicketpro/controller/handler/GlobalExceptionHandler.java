@@ -10,29 +10,42 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrorResponse handleDefaultException(Exception exception) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ApiErrorResponse(
+                status.value(),
+                exception.getMessage()
+        );
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex) {
+    public ApiErrorResponse handleResourceNotFoundException(ResourceNotFoundException exception) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         return new ApiErrorResponse(
                 status.value(),
-                ex.getMessage()
+                exception.getMessage()
         );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = getFieldsValidionErrorsMap(ex);
+    public ApiErrorResponse handleValidationExceptions(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = getFieldsValidionErrorsMap(exception);
 
         return new ApiErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
@@ -40,33 +53,33 @@ public class GlobalExceptionHandler {
                 errors
         );
     }
+
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ApiErrorResponse handleBadCredentialsException(BadCredentialsException ex) {
+    public ApiErrorResponse handleBadCredentialsException(BadCredentialsException exception) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         return new ApiErrorResponse(
                 status.value(),
-                ex.getMessage()
+                exception.getMessage()
         );
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RestClientException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiErrorResponse handleDefaultException(Exception ex) {
+    public ApiErrorResponse handleRestClientException(RestClientException exception) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         return new ApiErrorResponse(
                 status.value(),
-                ex.getMessage(),
-                ex.getLocalizedMessage()
+                exception.getMessage()
         );
     }
 
-    private static Map<String, String> getFieldsValidionErrorsMap(MethodArgumentNotValidException ex) {
-        return ex.getBindingResult()
+    private static Map<String, String> getFieldsValidionErrorsMap(MethodArgumentNotValidException exception) {
+        return exception.getBindingResult()
                 .getAllErrors()
                 .stream()
                 .filter(objectError -> objectError.getDefaultMessage() != null)

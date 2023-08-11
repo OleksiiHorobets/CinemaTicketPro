@@ -1,7 +1,7 @@
 package com.sigma.cinematicketpro.service.impl;
 
-import com.sigma.cinematicketpro.dto.AuthenticationRequest;
-import com.sigma.cinematicketpro.dto.RegistrationRequest;
+import com.sigma.cinematicketpro.dto.auth.AuthenticationRequest;
+import com.sigma.cinematicketpro.dto.auth.RegistrationRequest;
 import com.sigma.cinematicketpro.entity.CtpUser;
 import com.sigma.cinematicketpro.entity.Role;
 import com.sigma.cinematicketpro.exception.UserAlreadyExistsException;

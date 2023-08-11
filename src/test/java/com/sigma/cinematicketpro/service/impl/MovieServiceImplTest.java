@@ -6,6 +6,7 @@ import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
 import com.sigma.cinematicketpro.mapper.impl.MovieMapperImpl;
 import com.sigma.cinematicketpro.repository.MovieRepository;
+import com.sigma.cinematicketpro.service.TMDBService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,8 @@ class MovieServiceImplTest {
     private MovieMapperImpl movieMapper;
     @InjectMocks
     private MovieServiceImpl sut;
+    @Mock
+    private TMDBService tmdbService;
 
     @Test
     void shouldReturnCallRepositoryFindAllWhenGetAllMovies() {
@@ -143,5 +146,12 @@ class MovieServiceImplTest {
 
         verify(movieRepository, times(1)).existsById(movieId);
         verify(movieRepository, times(1)).deleteById(movieId);
+    }
+
+    @Test
+    void shouldCallTMDBServiceGetTrendingMoviesWhenGetTrendingMovies() {
+        sut.getTrendingMovies();
+
+        verify(tmdbService, times(1)).getTrendingMovies();
     }
 }

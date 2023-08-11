@@ -1,4 +1,4 @@
-package com.sigma.cinematicketpro.dto;
+package com.sigma.cinematicketpro.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

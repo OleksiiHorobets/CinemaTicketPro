@@ -1,11 +1,13 @@
 package com.sigma.cinematicketpro.service.impl;
 
 import com.sigma.cinematicketpro.dto.MovieDTO;
+import com.sigma.cinematicketpro.dto.tmdb.TMDBMovie;
 import com.sigma.cinematicketpro.entity.Movie;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
 import com.sigma.cinematicketpro.mapper.MovieMapper;
 import com.sigma.cinematicketpro.repository.MovieRepository;
 import com.sigma.cinematicketpro.service.MovieService;
+import com.sigma.cinematicketpro.service.TMDBService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
+    private final TMDBService tmdbService;
     private static final String MOVIE_NOT_FOUND = "Movie not found: {%s}";
 
     @Override
@@ -55,5 +58,10 @@ public class MovieServiceImpl implements MovieService {
             throw new ResourceNotFoundException(MOVIE_NOT_FOUND.formatted(id));
         }
         movieRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TMDBMovie> getTrendingMovies() {
+        return tmdbService.getTrendingMovies();
     }
 }

@@ -2,7 +2,7 @@ package com.sigma.cinematicketpro.controller;
 
 import com.sigma.cinematicketpro.config.WebSecurityConfiguration;
 import com.sigma.cinematicketpro.controller.handler.GlobalExceptionHandler;
-import com.sigma.cinematicketpro.dto.AuthenticationRequest;
+import com.sigma.cinematicketpro.dto.auth.AuthenticationRequest;
 import com.sigma.cinematicketpro.exception.ApiErrorResponse;
 import com.sigma.cinematicketpro.exception.ResourceNotFoundException;
 import com.sigma.cinematicketpro.service.CtpUserService;
@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.client.RestClientException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -138,5 +139,18 @@ class GlobalExceptionHandlerTest {
 
         assertThat(actualErrorsMap).isEqualTo(expectedErrorsMap);
         verify(mockFieldErrorWithNullMessage, times(1)).getDefaultMessage();
+    }
+
+    @Test
+    @WithMockUser("admin")
+    void shouldHandleRestClientExceptionExceptions() throws Exception {
+
+        when(movieController.getTrendingMovies()).thenThrow(new RestClientException("Connection failed!"));
+
+        mockMvc.perform(get("/movies/trending"))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{\"code\":500,\"message\":\"Connection failed!\"}"));
     }
 }

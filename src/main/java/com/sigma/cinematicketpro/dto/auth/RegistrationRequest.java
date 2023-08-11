@@ -1,4 +1,4 @@
-package com.sigma.cinematicketpro.dto;
+package com.sigma.cinematicketpro.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
