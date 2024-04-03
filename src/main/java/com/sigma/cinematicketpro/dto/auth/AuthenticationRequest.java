@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationRequest {
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String username;
-    @NotBlank
-    private String password;
+
+  @NotNull
+  @Size(min = 3, max = 50)
+  private String username;
+  @NotBlank
+  private String password;
 }

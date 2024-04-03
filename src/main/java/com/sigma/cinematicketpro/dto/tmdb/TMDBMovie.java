@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.sigma.cinematicketpro.entity.tmdb.TMDBGenre;
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.net.URI;
-import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @Builder
@@ -21,42 +20,43 @@ import java.util.Set;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TMDBMovie {
-    @JsonAlias({"id"})
-    private Long tmdbId;
 
-    @JsonAlias("adult")
-    private boolean adult;
+  @JsonAlias({"id"})
+  private Long tmdbId;
 
-    @JsonAlias({"backdrop_path"})
-    private URI backdropPath;
+  @JsonAlias("adult")
+  private boolean adult;
 
-    @JsonAlias({"genre_ids", "genres"})
-    private Set<TMDBGenre> genres;
+  @JsonAlias({"backdrop_path"})
+  private URI backdropPath;
 
-    @JsonAlias("original_language")
-    private String originalLanguage;
+  @JsonAlias({"genre_ids", "genres"})
+  private Set<TMDBGenre> genres;
 
-    @JsonAlias("original_title")
-    private String originalTitle;
+  @JsonAlias("original_language")
+  private String originalLanguage;
 
-    @JsonAlias("overview")
-    private String overview;
+  @JsonAlias("original_title")
+  private String originalTitle;
 
-    @JsonAlias("popularity")
-    private Double popularity;
+  @JsonAlias("overview")
+  private String overview;
 
-    @JsonAlias("poster_path")
-    private URI posterPath;
+  @JsonAlias("popularity")
+  private Double popularity;
 
-    @JsonAlias("release_date")
-    private LocalDate releaseDate;
+  @JsonAlias("poster_path")
+  private URI posterPath;
 
-    @JsonAlias("title")
-    private String title;
+  @JsonAlias("release_date")
+  private LocalDate releaseDate;
 
-    @JsonAlias("vote_average")
-    private Double voteAverage;
+  @JsonAlias("title")
+  private String title;
 
-    @JsonAlias("vote_count")
-    private Long voteCount;
+  @JsonAlias("vote_average")
+  private Double voteAverage;
+
+  @JsonAlias("vote_count")
+  private Long voteCount;
 }

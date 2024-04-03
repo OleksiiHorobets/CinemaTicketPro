@@ -14,6 +14,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +25,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Set;
-
 @Entity
 @Data
 @Builder
@@ -33,69 +32,70 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "users")
 public class CtpUser implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @NotBlank
-    @Size(max = 255)
-    @Column(name = "first_name")
-    private String firstName;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @NotBlank
-    @Size(max = 255)
-    @Column(name = "last_name")
-    private String lastName;
+  @NotBlank
+  @Size(max = 255)
+  @Column(name = "first_name")
+  private String firstName;
 
-    @Size(min = 3, max = 50)
-    @NotNull
-    @Indexed(unique = true)
-    private String username;
+  @NotBlank
+  @Size(max = 255)
+  @Column(name = "last_name")
+  private String lastName;
 
-    @Email
-    @NotNull
-    @Indexed(unique = true)
-    private String email;
+  @Size(min = 3, max = 50)
+  @NotNull
+  @Indexed(unique = true)
+  private String username;
 
-    @Size(min = 8, max = 255)
-    @NotNull
-    private String password;
+  @Email
+  @NotNull
+  @Indexed(unique = true)
+  private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+  @Size(min = 8, max = 255)
+  @NotNull
+  private String password;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(Role::getAuthority)
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-    }
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "users_roles",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
+  private Set<Role> roles;
 
-    //     TODO: (JIRA: CIN-79) This logic is suppressed because it's a pet project.
-    //      In case of need will be implemented according to application requirements and business rules.
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return roles.stream()
+        .map(Role::getAuthority)
+        .map(SimpleGrantedAuthority::new)
+        .toList();
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  //     TODO: (JIRA: CIN-79) This logic is suppressed because it's a pet project.
+  //      In case of need will be implemented according to application requirements and business rules.
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

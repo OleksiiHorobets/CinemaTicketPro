@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CtpUserServiceImpl implements CtpUserService {
-    private final UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found: %s".formatted(username)));
-    }
+  private final UserRepository userRepository;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) {
+    return userRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("Username not found: %s".formatted(username)));
+  }
 }
