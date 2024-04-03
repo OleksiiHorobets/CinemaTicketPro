@@ -8,15 +8,16 @@ import org.modelmapper.ModelMapper;
 
 @RequiredArgsConstructor
 public class MovieMapperImpl implements MovieMapper {
-    private final ModelMapper modelMapper;
 
-    @Override
-    public MovieDTO toDto(Movie movie) {
-        return modelMapper.map(movie, MovieDTO.class);
-    }
+  private final ModelMapper modelMapper;
 
-    @Override
-    public Movie toEntity(MovieDTO movieDto) {
-        return modelMapper.map(movieDto, Movie.class);
-    }
+  @Override
+  public MovieDTO toDto(Movie movie) {
+    return modelMapper.map(movie, MovieDTO.class);
+  }
+
+  @Override
+  public Movie toEntity(MovieDTO movieDto) {
+    return modelMapper.map(movieDto, Movie.class);
+  }
 }

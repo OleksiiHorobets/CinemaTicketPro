@@ -8,43 +8,43 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import java.net.URI;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.net.URI;
-import java.time.LocalDate;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieDTO {
-    @Size(min = 16, max = 32, message = "Id must be between 16 and 32 characters")
-    private String id;
 
-    @NotNull
-    @PositiveOrZero(message = "TMDB ID should not be negative")
-    private Long tmdbId;
+  @Size(min = 16, max = 32, message = "Id must be between 16 and 32 characters")
+  private String id;
 
-    @NotBlank(message = "Title should not be blank")
-    private String title;
+  @NotNull
+  @PositiveOrZero(message = "TMDB ID should not be negative")
+  private Long tmdbId;
 
-    @Min(0)
-    @Max(10)
-    private Double voteAverage;
+  @NotBlank(message = "Title should not be blank")
+  private String title;
 
-    @NotNull
-    @PositiveOrZero
-    private Long voteCount;
+  @Min(0)
+  @Max(10)
+  private Double voteAverage;
 
-    @Size(max = 1000)
-    private String overview;
+  @NotNull
+  @PositiveOrZero
+  private Long voteCount;
 
-    @ValidPosterUri
-    private URI posterPath;
+  @Size(max = 1000)
+  private String overview;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate releaseDate;
+  @ValidPosterUri
+  private URI posterPath;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  private LocalDate releaseDate;
 }

@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiErrorResponse {
-    private int code;
-    private String message;
-    private Object data;
-    public ApiErrorResponse(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
+
+  private int code;
+  private String message;
+  private Object data;
+
+  public ApiErrorResponse(int code, String message) {
+    this.code = code;
+    this.message = message;
+  }
 }

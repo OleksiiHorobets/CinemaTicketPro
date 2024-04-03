@@ -14,18 +14,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 @EqualsAndHashCode
 public final class TMDBGenre {
-    @Id
-    private final Long id;
-    private final String name;
 
-    public TMDBGenre(long id) {
-        this.id = id;
-        this.name = null;
-    }
+  @Id
+  private final Long id;
+  private final String name;
 
-    @PersistenceCreator
-    public TMDBGenre(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  public TMDBGenre(long id) {
+    this.id = id;
+    this.name = null;
+  }
+
+  @PersistenceCreator
+  public TMDBGenre(Long id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 }

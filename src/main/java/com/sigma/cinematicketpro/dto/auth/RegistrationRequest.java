@@ -14,19 +14,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegistrationRequest {
-    @NotBlank
-    @Size(max = 255)
-    private String firstName;
-    @NotBlank
-    @Size(max = 255)
-    private String lastName;
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String username;
-    @NotNull
-    @Email
-    private String email;
-    @NotNull
-    @Size(min = 8, max = 255)
-    private String password;
+
+  @NotBlank
+  @Size(max = 255)
+  private String firstName;
+  @NotBlank
+  @Size(max = 255)
+  private String lastName;
+  @NotNull
+  @Size(min = 3, max = 50)
+  private String username;
+  @NotNull
+  @Email
+  private String email;
+  @NotNull
+  @Size(min = 8, max = 255)
+  private String password;
 }
